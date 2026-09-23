@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Petualangan Bilangan Desimal</title>
+
+<style>
+
+/* =========================
+   GLOBAL
+========================= */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:"Segoe UI",Arial,sans-serif;
+    background:#f4f7ff;
+    color:#263238;
+    line-height:1.7;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+    min-height:430px;
+    padding:60px 8%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:40px;
+
+    background:
+    radial-gradient(circle at 80% 20%,#ffe082 0 8%,transparent 9%),
+    radial-gradient(circle at 10% 80%,#80deea 0 7%,transparent 8%),
+    linear-gradient(135deg,#3949ab,#5e35b1,#8e24aa);
+
+    color:white;
+    position:relative;
+    overflow:hidden;
+}
+
+header::before{
+    content:"0,5   1,25   2,75   3,50";
+    position:absolute;
+    font-size:80px;
+    font-weight:bold;
+    opacity:.08;
+    white-space:nowrap;
+    transform:rotate(-15deg);
+    top:40px;
+    left:-20px;
+}
+
+.hero{
+    max-width:650px;
+    position:relative;
+    z-index:2;
+}
+
+.badge{
+    display:inline-block;
+    background:#ffca28;
+    color:#3e2723;
+    padding:7px 16px;
+    border-radius:30px;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+
+h1{
+    font-size:clamp(35px,6vw,65px);
+    line-height:1.1;
+    margin-bottom:20px;
+}
+
+.hero p{
+    font-size:20px;
+    opacity:.95;
+}
+
+.hero-button{
+    display:inline-block;
+    margin-top:25px;
+    padding:13px 25px;
+    border-radius:30px;
+    background:white;
+    color:#512da8;
+    font-weight:bold;
+    text-decoration:none;
+    transition:.3s;
+}
+
+.hero-button:hover{
+    transform:translateY(-4px);
+    box-shadow:0 10px 20px #0003;
+}
+
+/* =========================
+   DECIMAL VISUAL
+========================= */
+
+.decimal-orbit{
+    width:280px;
+    height:280px;
+    border:3px dashed #ffffff77;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    animation:rotate 18s linear infinite;
+}
+
+.decimal-center{
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    background:#ffffff22;
+    backdrop-filter:blur(10px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:42px;
+    font-weight:bold;
+}
+
+.number{
+    position:absolute;
+    background:#fff;
+    color:#512da8;
+    padding:7px 13px;
+    border-radius:20px;
+    font-weight:bold;
+    box-shadow:0 5px 15px #0003;
+}
+
+.n1{top:-15px;left:95px;}
+.n2{right:-25px;top:90px;}
+.n3{bottom:-15px;left:90px;}
+.n4{left:-35px;top:90px;}
+
+@keyframes rotate{
+    from{transform:rotate(0)}
+    to{transform:rotate(360deg)}
+}
+
+/* =========================
+   NAVIGATION
+========================= */
+
+nav{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:#ffffffee;
+    backdrop-filter:blur(12px);
+    box-shadow:0 3px 15px #0001;
+    padding:10px;
+}
+
+.nav-container{
+    max-width:1100px;
+    margin:auto;
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+}
+
+nav a{
+    text-decoration:none;
+    color:#4527a0;
+    font-weight:bold;
+    padding:8px 14px;
+    border-radius:20px;
+    white-space:nowrap;
+}
+
+nav a:hover{
+    background:#ede7f6;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+main{
+    max-width:1100px;
+    margin:auto;
+    padding:55px 20px;
+}
+
+section{
+    margin-bottom:70px;
+}
+
+.section-title{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:25px;
+}
+
+.section-number{
+    width:45px;
+    height:45px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:#5e35b1;
+    color:white;
+    font-weight:bold;
+    font-size:20px;
+}
+
+h2{
+    color:#4527a0;
+    font-size:30px;
+}
+
+h3{
+    color:#37474f;
+    margin-bottom:10px;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    box-shadow:0 8px 25px #26323812;
+    border:1px solid #e8eaf6;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 15px 30px #26323820;
+}
+
+.card-icon{
+    font-size:38px;
+    margin-bottom:10px;
+}
+
+.highlight{
+    background:linear-gradient(135deg,#ede7f6,#e8eaf6);
+    border-left:6px solid #673ab7;
+    padding:20px;
+    border-radius:15px;
+    margin:20px 0;
+}
+
+/* =========================
+   PLACE VALUE
+========================= */
+
+.place-value{
+    overflow-x:auto;
+}
+
+.place-table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:600px;
+    text-align:center;
+    background:white;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 5px 20px #0001;
+}
+
+.place-table th{
+    background:#5e35b1;
+    color:white;
+    padding:15px;
+}
+
+.place-table td{
+    padding:15px;
+    border:1px solid #ddd;
+    font-size:20px;
+}
+
+.place-table .comma{
+    background:#ffca28;
+    font-weight:bold;
+}
+
+/* =========================
+   CPA
+========================= */
+
+.cpa{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.cpa-card{
+    padding:25px;
+    border-radius:20px;
+    color:#263238;
+}
+
+.concrete{
+    background:#fff3e0;
+    border-top:8px solid #fb8c00;
+}
+
+.pictorial{
+    background:#e0f7fa;
+    border-top:8px solid #00acc1;
+}
+
+.abstract{
+    background:#ede7f6;
+    border-top:8px solid #673ab7;
+}
+
+.visual-ten{
+    display:grid;
+    grid-template-columns:repeat(10,1fr);
+    gap:4px;
+    margin:15px 0;
+}
+
+.visual-ten span{
+    height:25px;
+    background:#81d4fa;
+    border-radius:4px;
+}
+
+.visual-ten span:nth-child(-n+7){
+    background:#7e57c2;
+}
+
+/* =========================
+   FRACTION TO DECIMAL
+========================= */
+
+.conversion{
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    gap:20px;
+    align-items:center;
+    margin-top:20px;
+}
+
+.fraction-box,
+.decimal-box{
+    background:white;
+    border-radius:20px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 8px 20px #0001;
+}
+
+.fraction{
+    font-size:38px;
+    font-weight:bold;
+    color:#5e35b1;
+}
+
+.arrow{
+    font-size:40px;
+    color:#ff9800;
+}
+
+.decimal{
+    font-size:38px;
+    font-weight:bold;
+    color:#00897b;
+}
+
+/* =========================
+   STEPS
+========================= */
+
+.steps{
+    counter-reset:step;
+}
+
+.step{
+    position:relative;
+    padding:20px 20px 20px 65px;
+    background:white;
+    border-radius:15px;
+    margin:12px 0;
+    box-shadow:0 4px 15px #0001;
+}
+
+.step::before{
+    counter-increment:step;
+    content:counter(step);
+    position:absolute;
+    left:18px;
+    top:18px;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    background:#673ab7;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+}
+
+/* =========================
+   COMPARISON
+========================= */
+
+.compare-box{
+    background:linear-gradient(135deg,#e8f5e9,#e0f2f1);
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+}
+
+.compare-number{
+    font-size:42px;
+    font-weight:bold;
+    margin:15px;
+}
+
+.symbol{
+    font-size:50px;
+    color:#e65100;
+    font-weight:bold;
+}
+
+.rule-box{
+    background:#fff8e1;
+    border:2px solid #ffca28;
+    padding:20px;
+    border-radius:15px;
+    margin-top:20px;
+}
+
+/* =========================
+   ORDERING
+========================= */
+
+.ordering{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+}
+
+.order-item{
+    padding:15px 22px;
+    border-radius:15px;
+    background:#ede7f6;
+    color:#4527a0;
+    font-weight:bold;
+    font-size:20px;
+}
+
+.order-arrow{
+    font-size:25px;
+}
+
+/* =========================
+   GAME
+========================= */
+
+.game{
+    background:linear-gradient(135deg,#263238,#4527a0);
+    color:white;
+    padding:35px;
+    border-radius:25px;
+    text-align:center;
+    box-shadow:0 15px 35px #0003;
+}
+
+.game h2{
+    color:white;
+}
+
+.question{
+    font-size:28px;
+    margin:25px 0;
+}
+
+.options{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+    max-width:600px;
+    margin:auto;
+}
+
+.option{
+    border:none;
+    padding:18px;
+    border-radius:15px;
+    background:white;
+    color:#4527a0;
+    font-size:20px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.option:hover{
+    transform:scale(1.03);
+    background:#ede7f6;
+}
+
+.feedback{
+    margin-top:20px;
+    min-height:35px;
+    font-weight:bold;
+}
+
+.score{
+    margin-top:15px;
+    font-size:18px;
+}
+
+/* =========================
+   FORMULA
+========================= */
+
+.formula{
+    background:#263238;
+    color:#fff;
+    padding:25px;
+    border-radius:18px;
+    font-family:monospace;
+    font-size:20px;
+    overflow-x:auto;
+}
+
+/* =========================
+   REFLECTION
+========================= */
+
+.reflection{
+    background:linear-gradient(135deg,#fff3e0,#fff8e1);
+    border-radius:25px;
+    padding:30px;
+}
+
+.reflection li{
+    margin:12px 0;
+    list-style:none;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    background:#263238;
+    color:white;
+    text-align:center;
+    padding:30px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:700px){
+
+    header{
+        flex-direction:column;
+        text-align:center;
+        padding:45px 20px;
+    }
+
+    .decimal-orbit{
+        width:220px;
+        height:220px;
+    }
+
+    .cpa{
+        grid-template-columns:1fr;
+    }
+
+    .conversion{
+        grid-template-columns:1fr;
+    }
+
+    .arrow{
+        transform:rotate(90deg);
+    }
+
+    .options{
+        grid-template-columns:1fr;
+    }
+
+    h2{
+        font-size:25px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+<!-- =========================
+     HERO
+========================= -->
+
+<header>
+
+<div class="hero">
+
+<span class="badge">MATEMATIKA • FASE C • KELAS 6</span>
+
+<h1>Petualangan Bilangan Desimal</h1>
+
+<p>
+Yuk memahami bilangan desimal, mengubah pecahan menjadi desimal,
+membandingkan, dan mengurutkan bilangan desimal melalui aktivitas
+yang menyenangkan!
+</p>
+
+<a href="#pengertian" class="hero-button">
+🚀 Mulai Petualangan
+</a>
+
+</div>
+
+
+<div class="decimal-orbit">
+
+<div class="decimal-center">0,75</div>
+
+<div class="number n1">0,5</div>
+<div class="number n2">1,25</div>
+<div class="number n3">2,75</div>
+<div class="number n4">3,5</div>
+
+</div>
+
+</header>
+
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<nav>
+
+<div class="nav-container">
+
+<a href="#pengertian">Pengertian</a>
+<a href="#nilai-tempat">Nilai Tempat</a>
+<a href="#pecahan">Pecahan → Desimal</a>
+<a href="#membandingkan">Membandingkan</a>
+<a href="#mengurutkan">Mengurutkan</a>
+<a href="#game">Game</a>
+<a href="#refleksi">Refleksi</a>
+
+</div>
+
+</nav>
+
+
+<main>
+
+
+<!-- =========================
+     1. PENGERTIAN
+========================= -->
+
+<section id="pengertian">
+
+<div class="section-title">
+
+<div class="section-number">1</div>
+
+<h2>Apa Itu Bilangan Desimal?</h2>
+
+</div>
+
+
+<div class="card-grid">
+
+<div class="card">
+
+<div class="card-icon">🍕</div>
+
+<h3>Bagian dari keseluruhan</h3>
+
+<p>
+Bilangan desimal digunakan untuk menyatakan nilai yang
+merupakan bagian dari satu keseluruhan.
+</p>
+
+<p><strong>Contoh:</strong> 0,5 berarti lima persepuluh atau ½.</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-icon">💰</div>
+
+<h3>Dalam kehidupan sehari-hari</h3>
+
+<p>
+Bilangan desimal dapat kita temukan ketika menyatakan
+harga, panjang, berat, jarak, waktu, dan ukuran lainnya.
+</p>
+
+<p>
+Contoh: panjang pensil <strong>12,5 cm</strong>.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-icon">📏</div>
+
+<h3>Hubungan dengan pecahan</h3>
+
+<p>
+Bilangan desimal mempunyai hubungan erat dengan pecahan
+berpenyebut 10, 100, 1.000, dan seterusnya.
+</p>
+
+<p>
+<strong>0,25 = 25/100 = ¼</strong>
+</p>
+
+</div>
+
+</div>
+
+
+<div class="highlight">
+
+<strong>💡 Ingat!</strong>
+
+<p>
+Bilangan desimal adalah bilangan yang mempunyai bagian
+bilangan bulat dan bagian pecahan yang dipisahkan oleh
+tanda koma.
+</p>
+
+<p style="font-size:24px;text-align:center;">
+<strong>3,75</strong> = 3 satuan + 75 perseratus
+</p>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     2. NILAI TEMPAT
+========================= -->
+
+<section id="nilai-tempat">
+
+<div class="section-title">
+
+<div class="section-number">2</div>
+
+<h2>Mengenal Nilai Tempat Desimal</h2>
+
+</div>
+
+
+<p>
+Perhatikan bilangan <strong>12,345</strong>.
+Setiap angka mempunyai nilai tempat yang berbeda.
+</p>
+
+
+<div class="place-value">
+
+<table class="place-table">
+
+<tr>
+
+<th>Puluhan</th>
+<th>Satuan</th>
+<th class="comma">Koma</th>
+<th>Persepuluhan</th>
+<th>Perseratusan</th>
+<th>Perseribuan</th>
+
+</tr>
+
+<tr>
+
+<td>1</td>
+<td>2</td>
+<td class="comma">,</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+
+</tr>
+
+</table>
+
+</div>
+
+
+<div class="card-grid" style="margin-top:25px;">
+
+<div class="card">
+
+<h3>🔵 Persepuluhan</h3>
+
+<p>
+Angka pertama setelah koma menunjukkan
+<strong>persepuluhan</strong>.
+</p>
+
+<p style="font-size:25px;">
+0,<strong>7</strong>
+</p>
+
+<p>
+Artinya 7/10.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>🟢 Perseratusan</h3>
+
+<p>
+Angka kedua setelah koma menunjukkan
+<strong>perseratusan</strong>.
+</p>
+
+<p style="font-size:25px;">
+0,7<strong>5</strong>
+</p>
+
+<p>
+Artinya 75/100.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h3>🟠 Perseribuan</h3>
+
+<p>
+Angka ketiga setelah koma menunjukkan
+<strong>perseribuan</strong>.
+</p>
+
+<p style="font-size:25px;">
+0,75<strong>8</strong>
+</p>
+
+<p>
+Artinya 758/1000.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="highlight">
+
+<strong>🧠 Cara mudah mengingat:</strong>
+
+<p>
+Semakin ke kanan setelah koma, penyebutnya semakin besar:
+</p>
+
+<p style="text-align:center;font-size:24px;">
+10 → 100 → 1.000 → 10.000
+</p>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     3. CPA
+========================= -->
+
+<section>
+
+<div class="section-title">
+
+<div class="section-number">3</div>
+
+<h2>Memahami Desimal dengan CPA</h2>
+
+</div>
+
+<p>
+Kita dapat memahami bilangan desimal melalui tiga tahap:
+<strong>Concrete – Pictorial – Abstract</strong>.
+</p>
+
+
+<div class="cpa">
+
+
+<div class="cpa-card concrete">
+
+<h3>🧱 Concrete</h3>
+
+<p>
+Gunakan benda nyata untuk menunjukkan bagian dari keseluruhan.
+</p>
+
+<p>
+Misalnya satu batang cokelat dibagi menjadi 10 bagian sama besar.
+Jika 7 bagian diambil, berarti:
+</p>
+
+<strong style="font-size:24px;">7/10</strong>
+
+</div>
+
+
+<div class="cpa-card pictorial">
+
+<h3>🎨 Pictorial</h3>
+
+<p>
+Gambarkan satu keseluruhan menjadi 10 bagian.
+Warnai 7 bagian.
+</p>
+
+<div class="visual-ten">
+
+<span></span><span></span><span></span><span></span><span></span>
+<span></span><span></span><span></span><span></span><span></span>
+
+</div>
+
+<p style="text-align:center;">
+7 dari 10 bagian = <strong>0,7</strong>
+</p>
+
+</div>
+
+
+<div class="cpa-card abstract">
+
+<h3>🔢 Abstract</h3>
+
+<p>
+Tuliskan dalam bentuk simbol matematika.
+</p>
+
+<p style="font-size:26px;text-align:center;">
+7/10 = <strong>0,7</strong>
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     4. PECAHAN KE DESIMAL
+========================= -->
+
+<section id="pecahan">
+
+<div class="section-title">
+
+<div class="section-number">4</div>
+
+<h2>Mengubah Pecahan Menjadi Desimal</h2>
+
+</div>
+
+
+<p>
+Pecahan dapat diubah menjadi bilangan desimal dengan beberapa cara.
+Salah satu cara yang mudah adalah mengubah penyebut menjadi
+<strong>10, 100, atau 1.000</strong>.
+</p>
+
+
+<div class="conversion">
+
+<div class="fraction-box">
+
+<div>Contoh</div>
+
+<div class="fraction">
+3/10
+</div>
+
+<p>Tiga persepuluh</p>
+
+</div>
+
+
+<div class="arrow">➜</div>
+
+
+<div class="decimal-box">
+
+<div>Bentuk desimal</div>
+
+<div class="decimal">
+0,3
+</div>
+
+<p>Tiga persepuluhan</p>
+
+</div>
+
+</div>
+
+
+<div class="steps">
+
+<div class="step">
+
+<strong>Perhatikan penyebut.</strong>
+
+<p>
+Penyebutnya adalah 10 sehingga pecahan dapat langsung
+ditulis dalam bentuk desimal.
+</p>
+
+</div>
+
+
+<div class="step">
+
+<strong>Pindahkan ke bentuk desimal.</strong>
+
+<p>
+3/10 = 0,3
+</p>
+
+</div>
+
+</div>
+
+
+<h3 style="margin-top:30px;">
+📚 Contoh lainnya
+</h3>
+
+
+<div class="card-grid">
+
+<div class="card">
+
+<h3>1/2</h3>
+
+<p>
+1/2 = 5/10
+</p>
+
+<strong style="font-size:25px;">
+= 0,5
+</strong>
+
+</div>
+
+
+<div class="card">
+
+<h3>25/100</h3>
+
+<p>
+25/100 langsung menunjukkan 25 perseratus.
+</p>
+
+<strong style="font-size:25px;">
+= 0,25
+</strong>
+
+</div>
+
+
+<div class="card">
+
+<h3>75/100</h3>
+
+<p>
+75/100 menunjukkan 75 perseratus.
+</p>
+
+<strong style="font-size:25px;">
+= 0,75
+</strong>
+
+</div>
+
+</div>
+
+
+<div class="formula">
+
+Pecahan berpenyebut 10 → 1 angka di belakang koma
+
+Pecahan berpenyebut 100 → 2 angka di belakang koma
+
+Pecahan berpenyebut 1.000 → 3 angka di belakang koma
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     5. MEMBANDINGKAN
+========================= -->
+
+<section id="membandingkan">
+
+<div class="section-title">
+
+<div class="section-number">5</div>
+
+<h2>Membandingkan Bilangan Desimal</h2>
+
+</div>
+
+
+<p>
+Membandingkan berarti menentukan bilangan mana yang
+lebih besar, lebih kecil, atau sama dengan bilangan lainnya.
+</p>
+
+
+<div class="compare-box">
+
+<div>
+
+<span class="compare-number">0,7</span>
+
+<span class="symbol">&gt;</span>
+
+<span class="compare-number">0,5</span>
+
+</div>
+
+<p>
+Karena 7 persepuluhan lebih besar daripada
+5 persepuluhan.
+</p>
+
+</div>
+
+
+<div class="rule-box">
+
+<h3>🔍 Langkah membandingkan desimal</h3>
+
+<ol>
+
+<li>Bandingkan angka pada bagian bilangan bulat.</li>
+
+<li>
+Jika sama, bandingkan angka pertama setelah koma
+(persepuluhan).
+</li>
+
+<li>
+Jika masih sama, bandingkan perseratusan.
+</li>
+
+<li>
+Lanjutkan ke tempat berikutnya sampai ditemukan perbedaan.
+</li>
+
+</ol>
+
+</div>
+
+
+<h3 style="margin-top:30px;">
+Contoh:
+</h3>
+
+
+<div class="card">
+
+<p style="font-size:25px;text-align:center;">
+
+<strong>2,45</strong>
+
+&nbsp;&nbsp; ? &nbsp;&nbsp;
+
+<strong>2,38</strong>
+
+</p>
+
+<hr style="margin:15px 0;">
+
+<p>
+Bilangan bulat sama-sama <strong>2</strong>.
+</p>
+
+<p>
+Persepuluhan: <strong>4 &gt; 3</strong>.
+</p>
+
+<p>
+Jadi:
+</p>
+
+<p style="text-align:center;font-size:30px;">
+
+<strong>2,45 &gt; 2,38</strong>
+
+</p>
+
+</div>
+
+
+<div class="highlight">
+
+<strong>⚠️ Hati-hati!</strong>
+
+<p>
+Jangan menganggap bilangan yang memiliki angka lebih banyak
+setelah koma selalu lebih besar.
+</p>
+
+<p style="text-align:center;font-size:24px;">
+
+<strong>0,5 = 0,50</strong>
+
+</p>
+
+<p>
+Nol di belakang bilangan desimal tidak mengubah nilainya.
+</p>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     6. MENGURUTKAN
+========================= -->
+
+<section id="mengurutkan">
+
+<div class="section-title">
+
+<div class="section-number">6</div>
+
+<h2>Mengurutkan Bilangan Desimal</h2>
+
+</div>
+
+
+<p>
+Mengurutkan berarti menyusun beberapa bilangan berdasarkan
+nilai tertentu, misalnya dari yang terkecil ke terbesar.
+</p>
+
+
+<div class="card">
+
+<h3>Contoh:</h3>
+
+<p>
+Urutkan:
+</p>
+
+<p style="font-size:25px;text-align:center;">
+0,75 &nbsp;&nbsp; 0,25 &nbsp;&nbsp; 0,5 &nbsp;&nbsp; 0,8
+</p>
+
+
+<p>
+Samakan banyak angka di belakang koma:
+</p>
+
+<p style="text-align:center;font-size:23px;">
+0,75 &nbsp;&nbsp;
+0,25 &nbsp;&nbsp;
+0,50 &nbsp;&nbsp;
+0,80
+</p>
+
+
+<div class="ordering">
+
+<div class="order-item">0,25</div>
+
+<div class="order-arrow">→</div>
+
+<div class="order-item">0,50</div>
+
+<div class="order-arrow">→</div>
+
+<div class="order-item">0,75</div>
+
+<div class="order-arrow">→</div>
+
+<div class="order-item">0,80</div>
+
+</div>
+
+<p style="text-align:center;margin-top:20px;">
+
+<strong>
+Jadi, urutan dari terkecil ke terbesar adalah
+0,25 &lt; 0,5 &lt; 0,75 &lt; 0,8.
+</strong>
+
+</p>
+
+</div>
+
+
+<div class="card-grid" style="margin-top:20px;">
+
+<div class="card">
+
+<div class="card-icon">⬆️</div>
+
+<h3>Urutan naik</h3>
+
+<p>
+Dari bilangan <strong>terkecil → terbesar</strong>.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-icon">⬇️</div>
+
+<h3>Urutan turun</h3>
+
+<p>
+Dari bilangan <strong>terbesar → terkecil</strong>.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     7. KEHIDUPAN NYATA
+========================= -->
+
+<section>
+
+<div class="section-title">
+
+<div class="section-number">7</div>
+
+<h2>Desimal dalam Kehidupan</h2>
+
+</div>
+
+
+<div class="card-grid">
+
+<div class="card">
+
+<div class="card-icon">⚖️</div>
+
+<h3>Berat</h3>
+
+<p>
+Ibu membeli gula sebanyak
+<strong>2,5 kg</strong>.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-icon">📏</div>
+
+<h3>Panjang</h3>
+
+<p>
+Panjang meja adalah
+<strong>1,25 meter</strong>.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-icon">💵</div>
+
+<h3>Uang</h3>
+
+<p>
+Bilangan desimal juga digunakan dalam berbagai bentuk
+perhitungan harga dan uang.
+</p>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-icon">🏃</div>
+
+<h3>Jarak</h3>
+
+<p>
+Jarak rumah ke sekolah dapat ditulis
+<strong>2,5 km</strong>.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     8. GAME
+========================= -->
+
+<section id="game">
+
+<div class="game">
+
+<h2>🏁 BALAPAN DESIMAL</h2>
+
+<p>
+Jawab pertanyaan dengan benar dan kumpulkan poin!
+</p>
+
+<div class="question" id="question">
+Memuat soal...
+</div>
+
+<div class="options" id="options"></div>
+
+<div class="feedback" id="feedback"></div>
+
+<div class="score">
+⭐ Skor: <span id="score">0</span>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =========================
+     9. REFLEKSI
+========================= -->
+
+<section id="refleksi">
+
+<div class="section-title">
+
+<div class="section-number">9</div>
+
+<h2>Refleksi Pembelajaran</h2>
+
+</div>
+
+
+<div class="reflection">
+
+<h3>🧠 Setelah belajar, coba pikirkan:</h3>
+
+<ul>
+
+<li>💭 Apa yang dimaksud dengan bilangan desimal?</li>
+
+<li>💭 Apa perbedaan persepuluhan dan perseratusan?</li>
+
+<li>💭 Bagaimana cara mengubah pecahan menjadi desimal?</li>
+
+<li>💭 Bagaimana cara menentukan bilangan desimal yang lebih besar?</li>
+
+<li>💭 Bagaimana cara mengurutkan bilangan desimal?</li>
+
+<li>💭 Di mana kamu menemukan bilangan desimal dalam kehidupan sehari-hari?</li>
+
+</ul>
+
+</div>
+
+</section>
+
+
+</main>
+
+
+<footer>
+
+<p>
+<strong>Petualangan Bilangan Desimal</strong>
+</p>
+
+<p>
+Matematika SD • Fase C • Kelas 6
+</p>
+
+<p>
+Belajar • Bermain • Berpikir • Merefleksi
+</p>
+
+</footer>
+
+
+<script>
+
+/* =====================================
+   GAME BALAPAN DESIMAL
+===================================== */
+
+const questions = [
+
+{
+question:"Manakah yang lebih besar?",
+options:["0,4","0,7","0,3","0,2"],
+answer:"0,7"
+},
+
+{
+question:"Bentuk desimal dari 1/2 adalah...",
+options:["0,2","0,25","0,5","0,75"],
+answer:"0,5"
+},
+
+{
+question:"Manakah yang lebih kecil?",
+options:["0,8","0,6","0,9","0,7"],
+answer:"0,6"
+},
+
+{
+question:"Hasil dari 25/100 dalam bentuk desimal adalah...",
+options:["0,025","0,25","2,5","25,0"],
+answer:"0,25"
+},
+
+{
+question:"Urutan dari terkecil ke terbesar yang benar adalah...",
+options:[
+"0,7 < 0,5 < 0,3",
+"0,3 < 0,5 < 0,7",
+"0,5 < 0,3 < 0,7",
+"0,7 < 0,3 < 0,5"
+],
+answer:"0,3 < 0,5 < 0,7"
+},
+
+{
+question:"Manakah yang benar?",
+options:[
+"0,5 > 0,50",
+"0,5 < 0,50",
+"0,5 = 0,50",
+"0,5 ≠ 0,50"
+],
+answer:"0,5 = 0,50"
+},
+
+{
+question:"Angka 7 pada 3,75 menempati nilai tempat...",
+options:[
+"Satuan",
+"Persepuluhan",
+"Perseratusan",
+"Perseribuan"
+],
+answer:"Persepuluhan"
+},
+
+{
+question:"Bentuk desimal dari 75/100 adalah...",
+options:[
+"0,075",
+"0,75",
+"7,5",
+"75,0"
+],
+answer:"0,75"
+}
+
+];
+
+
+let currentQuestion = 0;
+let score = 0;
+
+
+function loadQuestion(){
+
+    const q = questions[currentQuestion];
+
+    document.getElementById("question").textContent =
+        q.question;
+
+    const optionsContainer =
+        document.getElementById("options");
+
+    optionsContainer.innerHTML = "";
+
+    document.getElementById("feedback").textContent = "";
+
+    q.options.forEach(option => {
+
+        const button =
+            document.createElement("button");
+
+        button.className = "option";
+
+        button.textContent = option;
+
+        button.onclick = () => checkAnswer(option);
+
+        optionsContainer.appendChild(button);
+
+    });
+
+}
+
+
+function checkAnswer(selected){
+
+    const correct =
+        questions[currentQuestion].answer;
+
+    const feedback =
+        document.getElementById("feedback");
+
+
+    if(selected === correct){
+
+        score += 10;
+
+        feedback.textContent =
+            "🎉 Benar! Hebat, lanjutkan petualanganmu!";
+
+        feedback.style.color =
+            "#69f0ae";
+
+    }else{
+
+        feedback.textContent =
+            "💡 Belum tepat. Coba pahami kembali konsepnya.";
+
+        feedback.style.color =
+            "#ffcc80";
+
+    }
+
+
+    document.getElementById("score").textContent =
+        score;
+
+
+    setTimeout(() => {
+
+        currentQuestion++;
+
+        if(currentQuestion >= questions.length){
+
+            finishGame();
+
+        }else{
+
+            loadQuestion();
+
+        }
+
+    },1200);
+
+}
+
+
+function finishGame(){
+
+    const percentage =
+        Math.round(score / (questions.length * 10) * 100);
+
+    document.getElementById("question").textContent =
+        "🏆 Permainan selesai!";
+
+    document.getElementById("options").innerHTML = "";
+
+    document.getElementById("feedback").innerHTML =
+        `
+        Skor akhir kamu adalah <strong>${score}</strong>
+        dari ${questions.length * 10}.
+        <br>
+        Persentase: <strong>${percentage}%</strong>
+        <br><br>
+        ${getMessage(percentage)}
+        `;
+
+}
+
+
+function getMessage(percentage){
+
+    if(percentage >= 80){
+
+        return "🌟 Luar biasa! Kamu sudah sangat memahami bilangan desimal.";
+
+    }
+
+    if(percentage >= 60){
+
+        return "👏 Bagus! Tinggal memperkuat beberapa konsep lagi.";
+
+    }
+
+    return "💪 Tetap semangat! Mari pelajari kembali konsep desimal.";
+
+}
+
+
+loadQuestion();
+
+
+/* =====================================
+   SCROLL REVEAL SEDERHANA
+===================================== */
+
+const cards =
+document.querySelectorAll(".card,.cpa-card,.step");
+
+const observer =
+new IntersectionObserver(
+(entries) => {
+
+    entries.forEach(entry => {
+
+        if(entry.isIntersecting){
+
+            entry.target.style.opacity = "1";
+
+            entry.target.style.transform =
+                "translateY(0)";
+
+        }
+
+    });
+
+},
+{
+    threshold:.1
+}
+);
+
+
+cards.forEach(card => {
+
+    card.style.opacity = "0";
+
+    card.style.transform =
+        "translateY(20px)";
+
+    card.style.transition =
+        "all .6s ease";
+
+    observer.observe(card);
+
+});
+
+</script>
+
+</body>
+</html>
